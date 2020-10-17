@@ -1,0 +1,18 @@
+- age: 18
+  apartment: '321'
+  building: '123'
+  city: Nowy Jork
+  first_name: John
+  gender: Nieznana
+  last_name: Doe
+  street: 4th Avenue
+  zip: 00-001
+- age: 99
+  apartment: '1'
+  building: '1'
+  city: Aleksandria
+  first_name: Jan
+  gender: Mężczyzna
+  last_name: Kowalski
+  street: Akacjowa
+  zip: 00-100

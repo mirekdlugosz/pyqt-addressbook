@@ -1,3 +1,6 @@
+from pathlib import Path
+from tempfile import mkstemp
+
 from PyQt5.QtCore import QAbstractTableModel
 from PyQt5.QtCore import QSize
 from PyQt5.QtCore import QSortFilterProxyModel
@@ -91,8 +94,10 @@ class ContactListModel(QAbstractTableModel):
 
     def save_data(self):
         data = [contact.__dict__ for contact in self.contact_list]
-        with open(self.data_file, 'w') as fh:
+        _, tmp_path = mkstemp()
+        with open(tmp_path, 'w') as fh:
             yaml.dump(data, fh, allow_unicode=True)
+        Path(tmp_path).rename(self.data_file)
 
 
 class FilteredContactListModel(QSortFilterProxyModel):

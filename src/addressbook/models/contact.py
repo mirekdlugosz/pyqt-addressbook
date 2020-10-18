@@ -1,4 +1,3 @@
-from PyQt5.QtCore import Qt
 from PyQt5.QtCore import QAbstractListModel
 
 from addressbook.constants import DEFAULT_GENDER
@@ -58,6 +57,3 @@ class ContactModel(QAbstractListModel):
     def field_label(cls, index):
         labels = cls.field_labels()
         return labels[index]
-
-    def __repr__(self):
-        return "<{first_name} {last_name} {age}>".format(**self.__dict__)

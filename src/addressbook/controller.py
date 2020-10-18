@@ -1,10 +1,3 @@
-from pathlib import Path
-
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtWidgets import QDataWidgetMapper
-
 from addressbook.views import AddressBookMainWindow
 from addressbook.views import EditContactWindow
 
@@ -16,18 +9,19 @@ class AddressBookController:
         self._addressbook_widget = None
         self.main_window = AddressBookMainWindow(contact_list_model=self._contact_list)
 
-        # zdarzenia potrzebujące wymienić widok
+        # zdarzenia wymieniające widok - w kontrolerze, aby widoki nie musiały
+        # o sobie wiedzieć
         self.main_window.new_contact_button.clicked.connect(self.open_new_contact_view)
         self.main_window.edit_contact_button.clicked.connect(self.open_edit_contact_view)
 
-        # mógłby to robić widok, ale nie ma referencji do app
+        # mógłby to robić widok, ale nie ma referencji do `app`
         self.main_window.quit_button.clicked.connect(self._app.exit)
 
         self.main_window.show()
 
     def open_new_contact_view(self):
         self._contact_list.new_contact()
-        model_index = self._contact_list.rowCount(-1) - 1
+        model_index = self._contact_list.rowCount() - 1
         self._create_edit_contact_view(model_index)
 
     def open_edit_contact_view(self):
@@ -36,7 +30,9 @@ class AddressBookController:
         self._create_edit_contact_view(model_index)
 
     def _create_edit_contact_view(self, contact_index):
-        edit_window = EditContactWindow(contact_list_model=self._contact_list, contact_index=contact_index)
+        edit_window = EditContactWindow(
+            contact_list_model=self._contact_list, contact_index=contact_index
+        )
         self._addressbook_widget = self.main_window.takeCentralWidget()
         self.main_window.setCentralWidget(edit_window)
         edit_window.back_button.clicked.connect(self.close_edit_contact_view)

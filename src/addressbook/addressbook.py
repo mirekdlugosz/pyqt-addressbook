@@ -14,9 +14,6 @@ def process_args():
     parser.add_argument(
         "--file", "-f", help="YAML file with contacts",
     )
-    # parser.add_argument(
-    #     "--debug", "-v", help="Be more verbose; may be passed up to 5 times", action="count"
-    # )
     return parser.parse_known_args()
 
 

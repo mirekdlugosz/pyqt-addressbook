@@ -14,9 +14,7 @@ class EditContactWindow(QWidget):
         uic.loadUi(ui_file, self)
         self.gender_editbox.addItems(GENDER_LIST)
 
-        contact = contact_list_model.data(
-            contact_list_model.createIndex(contact_index, -1), Qt.DisplayRole
-        )
+        contact = contact_list_model.contact_by_index(contact_index)
 
         mapper = QDataWidgetMapper(self)
         mapper.setModel(contact_list_model)

@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QHeaderView
 
 from addressbook.constants import BASE_UI_PATH
-from addressbook.constants import QtColumnDisplayedRole
 
 
 class AddressBookMainWindow(QMainWindow):
@@ -14,11 +13,11 @@ class AddressBookMainWindow(QMainWindow):
         self._model = contact_list_model
         self.contact_list_view.setModel(contact_list_model)
         self.contact_list_view.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        for raw_index in range(contact_list_model.columnCount(-1)):
-            index = contact_list_model.createIndex(0, raw_index)
-            column_visible = not contact_list_model.data(index, QtColumnDisplayedRole)
-            self.contact_list_view.setColumnHidden(raw_index, column_visible)
+        for col_index in range(contact_list_model.columnCount()):
+            hide_column = not contact_list_model.is_column_visible(col_index)
+            self.contact_list_view.setColumnHidden(col_index, hide_column)
 
+        self.searchbox.textChanged.connect(self._model.set_lookup_value)
         # zdarzenia obsługiwane przez widok bezpośrednio
         self.contact_list_view.selectionModel().selectionChanged.connect(self.selectionChanged)
         self.delete_contact_button.clicked.connect(self.delete_contact)
@@ -30,5 +29,4 @@ class AddressBookMainWindow(QMainWindow):
 
     def delete_contact(self):
         selection = self.contact_list_view.selectionModel()
-        rows_index = [index.row() for index in selection.selectedRows()]
-        self._model.delete_contacts(rows_index)
+        self._model.delete_contacts(selection.selectedRows())

@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QApplication
 
 from addressbook.controller import AddressBookController
 from addressbook.models.contact_list import ContactListModel
+from addressbook.models.contact_list import FilteredContactListModel
 
 
 def process_args():
@@ -23,7 +24,9 @@ def main():
     args, unparsed_args = process_args()
     app = QApplication(unparsed_args)
     contact_list_model = ContactListModel(data_file=args.file)
-    controller = AddressBookController(app, contact_list_model)
+    filtered_contact_list_model = FilteredContactListModel()
+    filtered_contact_list_model.setSourceModel(contact_list_model)
+    controller = AddressBookController(app, filtered_contact_list_model)
     sys.exit(app.exec_())
 
 

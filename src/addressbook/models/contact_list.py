@@ -104,6 +104,7 @@ class FilteredContactListModel(QSortFilterProxyModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.lookup_value = None
+        self._cached_lookup_value = None
 
     def set_lookup_value(self, value):
         value = value or None
@@ -127,6 +128,8 @@ class FilteredContactListModel(QSortFilterProxyModel):
         return self.sourceModel().contact_by_index(index)
 
     def new_contact(self):
+        self._cached_lookup_value = self.lookup_value
+        self.set_lookup_value(None)
         return self.sourceModel().new_contact()
 
     def delete_contacts(self, indexes):
@@ -134,5 +137,9 @@ class FilteredContactListModel(QSortFilterProxyModel):
         return self.sourceModel().delete_contacts(source_indexes)
 
     def save_data(self):
-        self.invalidateFilter()
+        if self._cached_lookup_value:
+            self.set_lookup_value(self._cached_lookup_value)
+            self._cached_lookup_value = None
+        else:
+            self.invalidateFilter()
         return self.sourceModel().save_data()
